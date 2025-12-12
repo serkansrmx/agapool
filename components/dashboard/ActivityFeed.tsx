@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
 
 type Transaction = {
@@ -12,35 +11,26 @@ type Transaction = {
 
 export function ActivityFeed({ transactions }: { transactions: Transaction[] }) {
     return (
-        <Card className="col-span-4 max-h-[500px] overflow-hidden relative">
-            <CardHeader className="bg-background z-10 relative">
-                <CardTitle>Recent Activity</CardTitle>
-            </CardHeader>
-            <CardContent className="relative">
-                {/* Gradient Masks for fade effect */}
-                <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+        <div className="h-full relative overflow-hidden">
+            {/* Fade gradients */}
+            <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black to-transparent z-10 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none" />
 
-                <div className="space-y-4 animate-infinite-scroll">
-                    {/* First copy */}
-                    {transactions.concat(transactions).map((tx, i) => (
-                        <div key={`${tx.id}-${i}`} className="flex items-start p-3 rounded-lg border bg-card text-card-foreground shadow-sm">
-                            <div className="flex-1 space-y-1">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm font-medium leading-none">{tx.user_email || 'Anonim Aga'}</p>
-                                    <span className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</span>
-                                </div>
-                                <div className="flex items-center justify-between mt-2">
-                                    <p className="text-sm text-muted-foreground italic">{tx.note || 'No note'}</p>
-                                    <div className="font-bold text-green-500">
-                                        +{formatCurrency(tx.amount)}
-                                    </div>
-                                </div>
-                            </div>
+            <div className="space-y-6 animate-infinite-scroll p-4">
+                {/* Looping content */}
+                {transactions.concat(transactions).map((tx, i) => (
+                    <div key={`${tx.id}-${i}`} className="flex flex-col gap-1 text-sm bg-black/40 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
+                        <div className="flex justify-between items-baseline">
+                            <span className="font-bold text-brand-gold">{tx.user_email || 'Anonim'}</span>
+                            <span className="text-[10px] text-white/30">{new Date(tx.created_at).toLocaleDateString()}</span>
                         </div>
-                    ))}
-                </div>
-            </CardContent>
-        </Card>
+                        <p className="text-white/70 italic text-xs">{tx.note || 'Açıklama yok'}</p>
+                        <div className="text-right text-green-400 font-mono font-bold">
+                            +{formatCurrency(tx.amount)}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
     )
 }

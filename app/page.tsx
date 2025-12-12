@@ -57,38 +57,44 @@ export default async function Dashboard() {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto p-4 space-y-8 mt-6">
+      <div className="flex min-h-[calc(100vh-64px)]">
 
-        {/* 1. Total Balance Component */}
-        <BalanceCard />
+        {/* Left Column: Fixed Activity Feed */}
+        <div className="hidden lg:block w-80 sticky top-16 h-[calc(100vh-64px)] border-r border-white/5 bg-zinc-950/50 backdrop-blur">
+          <ActivityFeed transactions={mockTransactions as any[]} />
+        </div>
 
-        {/* 2. Action Area */}
-        {/* 2. Main Content Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Left Column: Activity Feed (Scrolling) */}
-          <div className="order-2 md:order-1">
+        {/* Right Column: Scrollable Content */}
+        <div className="flex-1 max-w-4xl mx-auto p-4 space-y-8 mt-6">
+
+          {/* Mobile Feed Warning or Alternative View (Hidden on large) */}
+          <div className="lg:hidden mb-8">
             <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">Son Hareketler</h2>
-            <ActivityFeed transactions={mockTransactions as any[]} />
-            {/* Empty array for now, real data integration requires more work or reuse mock if available */}
+            <div className="h-40 overflow-hidden relative border border-white/10 rounded-lg">
+              <ActivityFeed transactions={mockTransactions as any[]} />
+            </div>
           </div>
 
-          {/* Right Column: Transaction Form */}
-          <div className="order-1 md:order-2">
+          {/* 1. Total Balance */}
+          <BalanceCard />
+
+          {/* 2. Action Area */}
+          <section>
             <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">İşlemler</h2>
             <TransactionForm userId={user.id} />
-          </div>
-        </section>
+          </section>
 
-        {/* 3. Voting Section (New) */}
-        <section>
-          <VotingSection initialProposals={proposals} />
-        </section>
+          {/* 3. Voting Section */}
+          <section>
+            <VotingSection initialProposals={proposals} />
+          </section>
 
-        {/* 4. Leaderboard */}
-        <section>
-          <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">En Baba Agalar</h2>
-          <Leaderboard />
-        </section>
+          {/* 4. Leaderboard */}
+          <section>
+            <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">En Baba Agalar</h2>
+            <Leaderboard />
+          </section>
+        </div>
       </div>
     </main>
   );
