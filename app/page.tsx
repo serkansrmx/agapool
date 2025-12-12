@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import BalanceCard from '@/components/dashboard/BalanceCard';
 import TransactionForm from '@/components/forms/TransactionForm';
+import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
 import Leaderboard from '@/components/dashboard/Leaderboard';
 import VotingSection from '@/components/voting/VotingSection';
 import { getProposals } from '@/app/actions/voting';
@@ -21,6 +22,14 @@ export default async function Dashboard() {
     .select('*')
     .eq('id', user.id)
     .single();
+
+  // Mock Transactions for Demo
+  const mockTransactions = [
+    { id: '1', amount: 1250, status: 'approved', created_at: new Date().toISOString(), note: 'Mart Aidati', user_email: 'Ahmet Aga' },
+    { id: '2', amount: 500, status: 'approved', created_at: new Date(Date.now() - 86400000).toISOString(), note: 'Ekstra', user_email: 'Mehmet Aga' },
+    { id: '3', amount: 3000, status: 'pending', created_at: new Date(Date.now() - 172800000).toISOString(), note: 'Gecikmis Odeme', user_email: 'Ali Aga' },
+    { id: '4', amount: 1500, status: 'approved', created_at: new Date(Date.now() - 240000000).toISOString(), note: 'Nisan Aidati', user_email: 'Veli Aga' },
+  ];
 
   // 🔒 SECURITY GATE: Pending Users
   if (profile?.status === 'pending') {
@@ -48,15 +57,26 @@ export default async function Dashboard() {
         </div>
       </nav>
 
-      <div className="max-w-md mx-auto p-4 space-y-8 mt-6">
+      <div className="max-w-4xl mx-auto p-4 space-y-8 mt-6">
 
         {/* 1. Total Balance Component */}
         <BalanceCard />
 
         {/* 2. Action Area */}
-        <section>
-          <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">İşlemler</h2>
-          <TransactionForm userId={user.id} />
+        {/* 2. Main Content Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left Column: Activity Feed (Scrolling) */}
+          <div className="order-2 md:order-1">
+            <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">Son Hareketler</h2>
+            <ActivityFeed transactions={mockTransactions as any[]} />
+            {/* Empty array for now, real data integration requires more work or reuse mock if available */}
+          </div>
+
+          {/* Right Column: Transaction Form */}
+          <div className="order-1 md:order-2">
+            <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">İşlemler</h2>
+            <TransactionForm userId={user.id} />
+          </div>
         </section>
 
         {/* 3. Voting Section (New) */}

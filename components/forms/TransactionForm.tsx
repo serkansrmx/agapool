@@ -5,10 +5,11 @@ import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Upload } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 export default function TransactionForm({ userId }: { userId: string }) {
   const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const supabase = createClient();
@@ -23,13 +24,14 @@ export default function TransactionForm({ userId }: { userId: string }) {
       amount: parseFloat(amount),
       type: 'deposit',
       status: 'pending', // Requires admin approval
-      // proof_url: ... (File upload logic would go here, updating storage bucket)
+      note: note || null,
     });
 
     setLoading(false);
     if (!error) {
       setSent(true);
       setAmount('');
+      setNote('');
       setTimeout(() => setSent(false), 3000);
     }
   };
@@ -54,11 +56,15 @@ export default function TransactionForm({ userId }: { userId: string }) {
               </div>
             </div>
 
-            <div className="bg-black/10 p-3 rounded border border-dashed border-brand-gray/20 text-center cursor-pointer hover:border-brand-gold/50 transition-colors group">
-              <div className="flex flex-col items-center gap-1 text-brand-gray/50 group-hover:text-brand-gold/80 transition-colors">
-                <Upload size={16} />
-                <span className="text-xs">Dekont Yükle (Opsiyonel)</span>
-              </div>
+            <div className="space-y-2">
+              <label className="text-xs text-brand-gold font-mono tracking-wider">NOT (OPSİYONEL)</label>
+              <Input
+                type="text"
+                placeholder="Örn: 2024 Mart aidatı"
+                className="bg-black/20 border-brand-gold/20 text-brand-gray focus-visible:ring-brand-gold/50 placeholder:text-brand-gray/20"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              />
             </div>
 
             <Button
@@ -66,7 +72,7 @@ export default function TransactionForm({ userId }: { userId: string }) {
               className="w-full bg-brand-gold hover:bg-brand-lightGold text-brand-dark font-bold tracking-wide"
               disabled={loading}
             >
-              {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : 'DEKONT BİLDİR'}
+              {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : 'ÖDEME BİLDİR'}
             </Button>
             <p className="text-[10px] text-brand-gray/40 text-center font-mono">
               Fonlar: TR90 0000 0000 0000 0000 0000 00<br />

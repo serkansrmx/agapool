@@ -60,6 +60,15 @@ const config: Config = {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
                 sm: 'calc(var(--radius) - 4px)'
+            },
+            keyframes: {
+                'scroll-down': {
+                    '0%': { transform: 'translateY(-100%)' },
+                    '100%': { transform: 'translateY(0)' },
+                }
+            },
+            animation: {
+                'infinite-scroll': 'scroll-down 20s linear infinite',
             }
         }
     },
