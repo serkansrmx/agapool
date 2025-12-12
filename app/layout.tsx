@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TCK Agalar Pool",
+  title: "TCK Fonu",
   description: "Social Economy System",
 };
 
