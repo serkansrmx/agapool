@@ -3,23 +3,33 @@ import type { Config } from "tailwindcss";
 const config: Config = {
     darkMode: "class",
     content: [
-        "./app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
         extend: {
             colors: {
+                dark: {
+                    bg: '#0F0B15',
+                    sidebar: '#0F0B15',
+                    card: '#181223',
+                    cardHover: '#201930',
+                },
+                accent: {
+                    purple: '#7F3AF0',
+                    purpleLight: '#9F6CFA',
+                    green: '#2CB67D',
+                    blue: '#2CB67D'
+                },
+                // Mapped brand colors for backward compat
                 brand: {
-                    dark: '#0B0C15', // Deep background
-                    purple: '#6C5DD3', // Main accent
-                    purpleLight: '#8B7EF8',
-                    neonRequest: '#2F80ED',
-                    neonGreen: '#4ADE80',
-                    gray: '#E6E6E6',
-                    card: '#1F2128', // Sidebar/Card background
-                    text: '#808191', // Secondary text
-
-                    // Legacy colors (kept for build safety during migration)
+                    dark: '#0F0B15',
+                    purple: '#7F3AF0',
+                    neonGreen: '#2CB67D',
+                    gray: '#9CA3AF',
+                    card: '#181223',
+                    text: '#9CA3AF',
                     gold: '#ED985F',
                     lightGold: '#F7B980',
                 },
@@ -45,7 +55,8 @@ const config: Config = {
                     DEFAULT: 'hsl(var(--muted))',
                     foreground: 'hsl(var(--muted-foreground))'
                 },
-                accent: {
+                // Renamed shadcn accent to avoid conflict with User's design accent
+                shadcnAccent: {
                     DEFAULT: 'hsl(var(--accent))',
                     foreground: 'hsl(var(--accent-foreground))'
                 },

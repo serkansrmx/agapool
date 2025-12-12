@@ -2,33 +2,30 @@ import { Sailboat } from 'lucide-react';
 
 export function TargetCard() {
     return (
-        <div className="col-span-12 md:col-span-4 bg-brand-card rounded-3xl p-6 relative overflow-hidden border border-white/5 flex flex-col justify-between">
-            <div>
-                <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                        <Sailboat className="text-white w-6 h-6" />
-                    </div>
-                    <div className="text-right">
-                        <p className="text-white font-bold text-lg">$15,000</p>
-                        <p className="text-brand-text text-xs">Target Goal</p>
+        <div className="bg-dark-card rounded-2xl p-6 col-span-1 border border-gray-800/50 flex flex-col justify-center">
+            <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-cyan-900/40 rounded-xl flex items-center justify-center text-cyan-400">
+                    <Sailboat className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                    <h3 className="text-white font-bold leading-tight">Bodrum Yacht Trip</h3>
+                    <div className="flex justify-between text-xs text-gray-400 w-full mt-1">
+                        <span>Target Goal</span>
+                        <span className="text-white font-bold">$15,000</span>
                     </div>
                 </div>
-
-                <h3 className="text-white font-bold text-lg leading-tight mb-1">Bodrum Yacht Trip</h3>
-                <p className="text-brand-text text-xs mb-6">Summer '25 Allocation</p>
             </div>
 
-            <div>
-                <div className="flex justify-between items-end mb-2">
-                    <span className="text-3xl font-bold text-white">83%</span>
-                    <span className="text-sm text-brand-text">$2,550 left</span>
-                </div>
-
-                <div className="h-3 bg-brand-dark rounded-full overflow-hidden flex">
-                    <div className="w-[83%] h-full bg-gradient-to-r from-brand-purple to-cyan-400 rounded-full shadow-[0_0_15px_rgba(108,93,211,0.5)]" />
-                </div>
-                <p className="text-xs text-brand-text text-center mt-4">Projected completion: 12 Days</p>
+            <div className="flex justify-between items-end mb-2">
+                <span className="text-3xl font-bold text-white">83%</span>
+                <span className="text-sm text-gray-400">$2,550 left</span>
             </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-700/50 h-2 rounded-full overflow-hidden mb-3">
+                <div className="bg-gradient-to-r from-accent-purple to-cyan-400 h-full rounded-full" style={{ width: '83%' }}></div>
+            </div>
+            <p className="text-xs text-gray-500 text-center">Projected completion: 12 Days</p>
         </div>
     )
 }

@@ -1,71 +1,70 @@
 import Link from 'next/link';
-import { LayoutDashboard, Wallet, Trophy, History, Settings, LogOut, Disc } from 'lucide-react';
+// Using Lucide icons to match the design requirements
+import { ShieldCheck as ShieldIcon, LayoutGrid, Wallet as WalletIcon, Trophy as TrophyIcon, History, Settings, Megaphone as MegaphoneIcon, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
-    { icon: Wallet, label: 'Wallet', href: '/wallet' },
-    { icon: Trophy, label: 'Leaderboard', href: '/leaderboard' },
+    { icon: LayoutGrid, label: 'Dashboard', href: '/' },
+    { icon: WalletIcon, label: 'Wallet', href: '/wallet' },
+    { icon: TrophyIcon, label: 'Leaderboard', href: '/leaderboard' },
     { icon: History, label: 'History', href: '/history' },
     { icon: Settings, label: 'Settings', href: '/settings' },
 ];
 
 export function Sidebar() {
     return (
-        <div className="h-screen w-64 bg-brand-card flex flex-col border-r border-white/5 fixed left-0 top-0 z-50">
+        <aside className="w-64 bg-dark-sidebar flex flex-col border-r border-gray-800/30 h-screen fixed">
             {/* Logo */}
-            <div className="p-8 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-purple to-brand-neonRequest flex items-center justify-center">
-                    <Disc className="text-white w-6 h-6 spin-slow" />
+            <div className="p-6 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                    <ShieldIcon className="w-6 h-6" />
                 </div>
                 <div>
-                    <h1 className="font-bold text-white text-lg leading-none">TCK Agalar</h1>
-                    <span className="text-xs text-brand-text">POOL MANAGER</span>
+                    <h1 className="text-white font-bold text-lg leading-tight">TCK Agalar</h1>
+                    <p className="text-xs text-gray-500">POOL MANAGER</p>
                 </div>
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 px-4 space-y-2">
+            <nav className="flex-1 px-4 space-y-2 mt-4">
                 {menuItems.map((item) => (
                     <Link
                         key={item.label}
                         href={item.href}
-                        className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${item.label === 'Dashboard'
-                                ? 'bg-brand-purple text-white shadow-lg shadow-brand-purple/25'
-                                : 'text-brand-text hover:bg-white/5 hover:text-white'
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${item.label === 'Dashboard'
+                            ? 'text-white bg-[rgba(127,58,240,0.15)] border-l-[3px] border-accent-purple'
+                            : 'text-gray-300 hover:bg-white/5'
                             }`}
                     >
-                        <item.icon className="w-5 h-5" />
+                        <item.icon className={`w-5 h-5 ${item.label === 'Dashboard' ? 'text-accent-purple' : ''}`} />
                         <span className="font-medium">{item.label}</span>
                     </Link>
                 ))}
             </nav>
 
-            {/* Bottom Actions */}
-            <div className="p-4 mt-auto space-y-4">
-                {/* Proposal CTA */}
-                <div className="bg-gradient-to-br from-brand-card to-brand-dark border border-white/5 p-4 rounded-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-brand-purple/20 blur-2xl rounded-full -mr-10 -mt-10" />
-                    <h3 className="text-white font-bold mb-1 relative z-10">PROPOSAL</h3>
-                    <p className="text-xs text-brand-text mb-3 relative z-10">Vote on the next venue for the Summer '25 trip.</p>
-                    <Button size="sm" className="w-full bg-brand-purple hover:bg-brand-purpleLight text-white border-0">
+            {/* Bottom Section */}
+            <div className="p-4 mt-auto">
+                {/* Proposal Card */}
+                <div className="mb-4 p-4 rounded-xl bg-gradient-to-b from-[#1E182F] to-[#151020] border border-gray-800/50">
+                    <div className="flex items-center gap-2 mb-2 text-white">
+                        <MegaphoneIcon className="text-blue-400 w-4 h-4" />
+                        <span className="font-bold text-sm">PROPOSAL</span>
+                    </div>
+                    <p className="text-xs text-gray-400 mb-3">Vote on the next venue for the Summer '24 trip.</p>
+                    <button className="w-full bg-accent-purple hover:bg-accent-purpleLight text-white py-2 rounded-lg text-sm font-semibold transition-colors">
                         Vote Now
-                    </Button>
+                    </button>
                 </div>
 
-                {/* User Profile Stub (Logout) */}
-                <div className="flex items-center gap-3 px-2 pt-2 border-t border-white/5">
-                    <div className="w-10 h-10 rounded-full bg-brand-gray/10 overflow-hidden">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
-                    </div>
-                    <div className="flex-1 overflow-hidden">
-                        <p className="text-sm font-bold text-white truncate">Cem</p>
-                        <button className="text-xs text-brand-text hover:text-red-400 flex items-center gap-1 transition-colors">
-                            <LogOut className="w-3 h-3" /> Logout
-                        </button>
+                {/* User Profile */}
+                <div className="pt-4 border-t border-gray-800/30 flex items-center gap-3">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cem" alt="Cem" className="w-10 h-10 rounded-full border-2 border-gray-700" />
+                    <div>
+                        <p className="text-white text-sm font-semibold">Cem</p>
+                        <p className="text-xs text-gray-500 cursor-pointer hover:text-white">View Profile</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
     );
 }
