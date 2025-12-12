@@ -10,10 +10,18 @@ const config: Config = {
         extend: {
             colors: {
                 brand: {
-                    dark: '#001F3D',
+                    dark: '#0B0C15', // Deep background
+                    purple: '#6C5DD3', // Main accent
+                    purpleLight: '#8B7EF8',
+                    neonRequest: '#2F80ED',
+                    neonGreen: '#4ADE80',
+                    gray: '#E6E6E6',
+                    card: '#1F2128', // Sidebar/Card background
+                    text: '#808191', // Secondary text
+
+                    // Legacy colors (kept for build safety during migration)
                     gold: '#ED985F',
                     lightGold: '#F7B980',
-                    gray: '#E6E6E6'
                 },
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',

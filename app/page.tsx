@@ -1,11 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import BalanceCard from '@/components/dashboard/BalanceCard';
-import TransactionForm from '@/components/forms/TransactionForm';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { WarChestCard } from '@/components/dashboard/WarChestCard';
+import { TargetCard } from '@/components/dashboard/TargetCard';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
-import Leaderboard from '@/components/dashboard/Leaderboard';
-import VotingSection from '@/components/voting/VotingSection';
-import { getProposals } from '@/app/actions/voting';
+import { Bell, Plus, ArrowUpRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -13,17 +13,13 @@ export default async function Dashboard() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  // Fetch Proposals
-  const proposals = await getProposals();
-
-  // Fetch Profile to check Status
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single();
 
-  // Mock Transactions for Demo
+  // Mock Transactions (Temporary, replace with real fetch logic later)
   const mockTransactions = [
     { id: '1', amount: 1250, status: 'approved', created_at: new Date().toISOString(), note: 'Mart Aidati', user_email: 'Ahmet Aga' },
     { id: '2', amount: 500, status: 'approved', created_at: new Date(Date.now() - 86400000).toISOString(), note: 'Ekstra', user_email: 'Mehmet Aga' },
@@ -31,69 +27,110 @@ export default async function Dashboard() {
     { id: '4', amount: 1500, status: 'approved', created_at: new Date(Date.now() - 240000000).toISOString(), note: 'Nisan Aidati', user_email: 'Veli Aga' },
   ];
 
-  // 🔒 SECURITY GATE: Pending Users
-  if (profile?.status === 'pending') {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 text-cyan-500 font-mono p-4">
-        <div className="border border-cyan-500/50 p-8 rounded-lg bg-zinc-900/50 backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-          <h1 className="text-3xl font-bold mb-4">ERİŞİM REDDEDİLDİ</h1>
-          <p className="text-gray-300">Hesabınız şu anda <span className="text-yellow-400">ONAY BEKLİYOR</span>.</p>
-          <p className="text-sm text-gray-500 mt-2">Lütfen girişiniz onaylanana kadar bir Admin'den (Aga) onay bekleyin.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-zinc-950 text-white pb-20">
-      {/* Navbar Placeholder */}
-      <nav className="border-b border-brand-gold/10 bg-brand-dark/50 backdrop-blur-md p-4 flex justify-between items-center sticky top-0 z-50">
-        <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-lightGold text-xl">
-          TCK POOL
-        </span>
-        <div className="flex gap-4 items-center">
-          {profile?.role === 'admin' && <a href="/admin" className="text-xs text-brand-gold hover:underline">ADMIN PANEL</a>}
-          <span className="text-xs font-mono text-brand-gray/50">@{profile?.username}</span>
-        </div>
-      </nav>
+    <main className="min-h-screen bg-brand-dark text-white font-sans selection:bg-brand-purple/30">
 
-      <div className="flex min-h-[calc(100vh-64px)]">
+      {/* 1. Sidebar Navigation */}
+      <Sidebar />
 
-        {/* Left Column: Fixed Activity Feed */}
-        <div className="hidden lg:block w-80 sticky top-16 h-[calc(100vh-64px)] border-r border-white/5 bg-zinc-950/50 backdrop-blur">
-          <ActivityFeed transactions={mockTransactions as any[]} />
-        </div>
+      {/* 2. Main Content Area */}
+      <div className="pl-64">
+        {/* Header */}
+        <header className="h-24 px-8 flex items-center justify-between border-b border-white/5 bg-brand-dark/50 backdrop-blur sticky top-0 z-40">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+            <p className="text-sm text-brand-text">Welcome back, Aga. Here's the war chest status.</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="w-10 h-10 rounded-full bg-brand-card border border-white/5 flex items-center justify-center text-brand-text hover:text-white transition-colors relative">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-brand-card" />
+            </button>
+            <Button className="bg-brand-purple hover:bg-brand-purpleLight text-white rounded-xl h-10 px-6 font-bold shadow-lg shadow-brand-purple/20">
+              <Plus className="w-4 h-4 mr-2" />
+              Deposit Funds
+            </Button>
+          </div>
+        </header>
 
-        {/* Right Column: Scrollable Content */}
-        <div className="flex-1 max-w-4xl mx-auto p-4 space-y-8 mt-6">
+        {/* Scrollable Content */}
+        <div className="p-8 max-w-[1600px] mx-auto space-y-8">
 
-          {/* Mobile Feed Warning or Alternative View (Hidden on large) */}
-          <div className="lg:hidden mb-8">
-            <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">Son Hareketler</h2>
-            <div className="h-40 overflow-hidden relative border border-white/10 rounded-lg">
-              <ActivityFeed transactions={mockTransactions as any[]} />
+          {/* Top Row: Cards */}
+          <div className="grid grid-cols-12 gap-8">
+            <WarChestCard />
+            <TargetCard />
+          </div>
+
+          {/* Middle Row: Chart & Leaderboard (Placeholder for now) */}
+          <div className="grid grid-cols-12 gap-8">
+            {/* Growth Chart Placeholder */}
+            <div className="col-span-12 md:col-span-8 bg-brand-card rounded-3xl p-8 border border-white/5 h-[400px] flex items-center justify-center text-brand-text">
+              [Growth Chart Coming Soon]
+            </div>
+
+            {/* Top Agalar Placeholder */}
+            <div className="col-span-12 md:col-span-4 bg-brand-card rounded-3xl p-8 border border-white/5 h-[400px]">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="text-yellow-400">👑</div>
+                  <h3 className="font-bold text-white">Top Agalar</h3>
+                </div>
+                <span className="text-xs text-brand-purple cursor-pointer hover:underline">View All</span>
+              </div>
+              <div className="space-y-4">
+                {/* Mock List */}
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-brand-dark/50 border border-white/5">
+                    <span className="text-brand-purple font-bold font-mono">#{i}</span>
+                    <div className="w-10 h-10 rounded-full bg-brand-gray/20"></div>
+                    <div className="flex-1">
+                      <p className="text-white font-bold text-sm">Aga #{i}</p>
+                      <p className="text-brand-text text-xs">Member</p>
+                    </div>
+                    <span className="text-white font-bold">$1,200</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* 1. Total Balance */}
-          <BalanceCard />
+          {/* Bottom Row: Activity Feed */}
+          <div className="bg-brand-card rounded-3xl p-8 border border-white/5">
+            <h3 className="font-bold text-white mb-6">Recent Activity</h3>
+            <div className="grid grid-cols-12 text-xs text-brand-text uppercase font-bold tracking-wider mb-4 px-4">
+              <div className="col-span-4">Transaction</div>
+              <div className="col-span-3">User</div>
+              <div className="col-span-3">Date</div>
+              <div className="col-span-2 text-right">Amount</div>
+            </div>
 
-          {/* 2. Action Area */}
-          <section>
-            <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">İşlemler</h2>
-            <TransactionForm userId={user.id} />
-          </section>
+            <div className="space-y-2">
+              {mockTransactions.map((tx) => (
+                <div key={tx.id} className="grid grid-cols-12 items-center p-4 hover:bg-white/5 rounded-xl transition-colors border-b border-white/5 last:border-0 group">
+                  <div className="col-span-4 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-brand-neonGreen/10 flex items-center justify-center text-brand-neonGreen">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium text-sm group-hover:text-brand-purple transition-colors">{tx.note || 'Contribution'}</p>
+                    </div>
+                  </div>
+                  <div className="col-span-3 flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-brand-gray/20" />
+                    <span className="text-brand-text text-sm">{tx.user_email?.split(' ')[0]}</span>
+                  </div>
+                  <div className="col-span-3 text-brand-text text-sm">
+                    {new Date(tx.created_at).toLocaleDateString()}
+                  </div>
+                  <div className="col-span-2 text-right font-bold text-brand-neonGreen">
+                    +${tx.amount}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* 3. Voting Section */}
-          <section>
-            <VotingSection initialProposals={proposals} />
-          </section>
-
-          {/* 4. Leaderboard */}
-          <section>
-            <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">En Baba Agalar</h2>
-            <Leaderboard />
-          </section>
         </div>
       </div>
     </main>
