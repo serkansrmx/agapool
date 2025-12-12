@@ -3,12 +3,17 @@ import { redirect } from 'next/navigation';
 import BalanceCard from '@/components/dashboard/BalanceCard';
 import TransactionForm from '@/components/forms/TransactionForm';
 import Leaderboard from '@/components/dashboard/Leaderboard';
+import VotingSection from '@/components/voting/VotingSection';
+import { getProposals } from '@/app/actions/voting';
 
 export default async function Dashboard() {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
+
+  // Fetch Proposals
+  const proposals = await getProposals();
 
   // Fetch Profile to check Status
   const { data: profile } = await supabase
@@ -54,7 +59,12 @@ export default async function Dashboard() {
           <TransactionForm userId={user.id} />
         </section>
 
-        {/* 3. Leaderboard */}
+        {/* 3. Voting Section (New) */}
+        <section>
+          <VotingSection initialProposals={proposals} />
+        </section>
+
+        {/* 4. Leaderboard */}
         <section>
           <h2 className="text-sm font-bold text-brand-gray/40 mb-2 uppercase tracking-wider">En Baba Agalar</h2>
           <Leaderboard />
