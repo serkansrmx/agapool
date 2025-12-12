@@ -63,7 +63,7 @@ const config: Config = {
             },
             keyframes: {
                 'scroll-down': {
-                    '0%': { transform: 'translateY(-100%)' },
+                    '0%': { transform: 'translateY(-50%)' },
                     '100%': { transform: 'translateY(0)' },
                 }
             },
